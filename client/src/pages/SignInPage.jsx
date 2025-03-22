@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "../styles/global.css";
 import React from "react";
 
-export default function RegisterPage() {
+export default function SignInPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    confirmPassword: "",
-    email: "",
   });
 
   const handleChange = (e) => {
@@ -19,23 +17,21 @@ export default function RegisterPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
+    console.log("Sign In Submitted", formData);
   };
 
   return (
-    <div className="register-container">
-      <header className="register-header">
-        <div className="container">
-          <div className="logo">
-            Photo<span>Hub</span>
-          </div>
-          <button className="login-btn" onClick={() => navigate("/login")}>
-            Login
-          </button>
+    <div className="auth-container">
+      <header className="auth-header">
+        <div className="logo">
+          Photo<span>Hub</span>
         </div>
+        <button className="nav-btn" onClick={() => navigate("/register")}>
+          Register
+        </button>
       </header>
 
-      <form className="register-form" onSubmit={handleSubmit}>
+      <form className="auth-form" onSubmit={handleSubmit}>
         <label>Username</label>
         <input
           type="text"
@@ -50,18 +46,14 @@ export default function RegisterPage() {
           value={formData.password}
           onChange={handleChange}
         />
-        <label>Confirm Password</label>
-        <input
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-        />
-        <label>Email</label>
-        <input type="email" name="email" value={formData.email} />
-
+        <p
+          className="forgot-password"
+          onClick={() => navigate("/forgot-password")}
+        >
+          Forgot Password?
+        </p>
         <button type="submit" className="primary-btn">
-          Register
+          Login
         </button>
       </form>
     </div>
