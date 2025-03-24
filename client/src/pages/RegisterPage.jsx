@@ -24,15 +24,6 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-container">
-      <header className="auth-header">
-        <div className="logo">
-          Photo<span>Hub</span>
-        </div>
-        <button className="nav-btn" onClick={() => navigate("/signin")}>
-          Login
-        </button>
-      </header>
-
       <form className="auth-form" onSubmit={handleSubmit}>
         <label>Username</label>
         <input

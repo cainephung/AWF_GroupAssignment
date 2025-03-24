@@ -22,15 +22,6 @@ export default function SignInPage() {
 
   return (
     <div className="auth-container">
-      <header className="auth-header">
-        <div className="logo">
-          Photo<span>Hub</span>
-        </div>
-        <button className="nav-btn" onClick={() => navigate("/register")}>
-          Register
-        </button>
-      </header>
-
       <form className="auth-form" onSubmit={handleSubmit}>
         <label>Username</label>
         <input

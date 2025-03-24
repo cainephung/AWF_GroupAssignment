@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "../styles/global.css";
 import React from "react";
 
 export default function ForgotPasswordPage() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
 
   const handleSubmit = (e) => {
@@ -14,15 +12,6 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="auth-container">
-      <header className="auth-header">
-        <div className="logo">
-          Photo<span>Hub</span>
-        </div>
-        <button className="nav-btn" onClick={() => navigate("/signin")}>
-          Back to Login
-        </button>
-      </header>
-
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2 className="auth-title">Forgot Password</h2>
         <p className="auth-description">

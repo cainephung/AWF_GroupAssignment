@@ -8,6 +8,7 @@
   background-color: #d3d3d3;
   font-family: "Inter", sans-serif;
   color: #000;
+  padding-top: 80px;
 }
 
 .auth-header {
@@ -25,8 +26,10 @@
 }
 
 .auth-header .logo {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
+  color: black;
+  cursor: pointer;
 }
 
 .auth-header .logo span {
@@ -39,38 +42,39 @@
   background: black;
   color: white;
   border: none;
-  padding: 8px 18px;
-  font-size: 14px;
-  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
 }
 
 .auth-form {
-  width: 450px;
+  width: 500px;
   background: #d3d3d3;
-  padding: 30px;
-  border-radius: 10px;
+  padding: 40px;
+  border-radius: 12px;
   text-align: left;
-  margin-top: 100px;
+  margin-top: 20px;
+  font-size: 18px;
 }
 
 .auth-form label {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: block;
 }
 
 .auth-form input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 18px;
+  padding: 14px;
+  margin-bottom: 20px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #aaa;
   color: black;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .auth-form input:focus {
@@ -79,18 +83,16 @@
 }
 
 .primary-btn {
-  /* width: 100%; */
-  padding: 12px 24px;
+  padding: 14px 28px;
   justify-content: center;
   align-items: center;
   display: block;
   margin: 0 auto;
-  padding: 12px;
   background: black;
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
   text-align: center;
@@ -102,8 +104,8 @@
 
 .forgot-password {
   text-align: right;
-  margin-bottom: 18px;
-  font-size: 14px;
+  margin-bottom: 20px;
+  font-size: 16px;
   color: #0000ee;
   text-decoration: underline;
   cursor: pointer;
@@ -113,9 +115,10 @@
 .forgot-password:hover {
   color: #ff8000;
 }
+
 .auth-switch {
-  margin-top: 18px;
-  font-size: 14px;
+  margin-top: 22px;
+  font-size: 16px;
   text-align: center;
   color: #333;
   cursor: pointer;
@@ -129,4 +132,42 @@
 
 .auth-switch:hover span {
   color: #ff8000;
+}
+
+.main-nav {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  z-index: 99;
+}
+
+.nav-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.nav-list li {
+  flex: 1;
+  padding: 14px 0;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-right: 1px solid #ddd;
+  color: black;
+}
+
+.nav-list li:last-child {
+  border-right: none;
+}
+
+.nav-list li:hover {
+  background-color: #eaeaea;
 }
