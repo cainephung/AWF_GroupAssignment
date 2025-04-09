@@ -1,14 +1,15 @@
 const express = require("express");
 const settings = require("./settings.json");
+require('dotenv').config()
+
+const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
 const app = express();
 const port = 3000;
 
-const { getImagesFromDatabase } = require("./scripts/database");
+const { getImagesFromDatabase, testConnection } = require("./scripts/database");
 
-app.get("/", (req, res) => {
-  res.send(
-    '<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia1.tenor.com%2Fm%2FsW9GOo6TshcAAAAd%2Fevil-larry.gif&f=1&nofb=1&ipt=7925bf4ea209e6544363603f678cdc6ff9e99d12458d9f22c087df46176a2753&ipo=images" />'
-  );
+app.get("/", async (req, res) => {
+  res.json(await testConnection())
 });
 
 // Example request localhost:port/get_images/1234/5678

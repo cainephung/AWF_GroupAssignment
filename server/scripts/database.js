@@ -1,3 +1,6 @@
+require('dotenv').config();
+const { neon } = require('@neondatabase/serverless');
+const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
 // image_id could be a list of multiple id's or undefined in which case we
 //  can assume the user wants all images.
 //
@@ -7,6 +10,14 @@ async function getImagesFromDatabase(user_id, image_id = undefined) {
   return [];
 }
 
+async function testConnection() {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`SELECT version()`;
+  const { version } = response[0];
+  return version;
+}
+
 module.exports = {
   getImagesFromDatabase,
+  testConnection
 };
