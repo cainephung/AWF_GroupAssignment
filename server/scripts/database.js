@@ -81,6 +81,17 @@ async function selectImageById(image_id) {
   return response;
 }
 
+async function selectManyImageById(image_ids) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`SELECT * FROM images WHERE image_id IN (${image_ids});`;
+  
+  if (settings.DEBUG) {
+    console.log(response);
+  }
+
+  return response;
+}
+
 async function deleteImageById(image_id) {
   const sql = neon(`${CONNECTION_STRING}`);
   const response = await sql`DELETE FROM images WHERE image_id = ${image_id};`;
@@ -203,6 +214,7 @@ module.exports = {
   
   createImage,
   selectImageById,
+  selectManyImageById,
   deleteImageById,
 
   createAlbum,

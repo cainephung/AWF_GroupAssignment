@@ -11,6 +11,7 @@ const {
   
   createImage,
   selectImageById,
+  selectManyImageById,
   deleteImageById,
 
   createAlbum,
@@ -74,6 +75,15 @@ app.get("/get_image/:image_id", async (req, res) => {
   const image_id = req.params.image_id;
 
   const result = await selectImageById(image_id);
+  
+  res.json(result);
+});
+
+app.get("/get_many_image/:image_ids", async (req, res) => {
+  // This should be multiple image ids comma separated (ex. 1,3,5,7)
+  const image_ids = req.params.image_ids;
+
+  const result = await selectImageById(image_ids);
   
   res.json(result);
 });
