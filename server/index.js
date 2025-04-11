@@ -122,6 +122,42 @@ app.get("/add_image_album/:album_id/:image_id", async (req, res) => {
   res.json(result);
 });
 
+// Tags API
+// Untested
+app.get("/create_tag/:user_id/:tag_name", async (req, res) => {
+  const user_id = req.params.identifier;
+  const tag_name = req.params.tag_name;
+
+  const result = await createTag(user_id, tag_name);
+  
+  res.json(result);
+});
+
+app.get("/get_tag_imageIds/:tag_id", async (req, res) => {
+  const tag_id = req.params.tag_id;
+
+  const result = await selectImageIdByTagId(tag_id);
+  
+  res.json(result);
+});
+
+app.get("/delete_image/:tag_id", async (req, res) => {
+  const tag_id = req.params.tag_id;
+
+  const result = await deleteTagById(tag_id);
+  
+  res.json(result);
+});
+
+app.get("/add_image_tag/:tag_id/:image_id", async (req, res) => {
+  const tag_id = req.params.tag_id;
+  const image_id = req.params.image_id;
+
+  const result = await addTagToImage(tag_id, image_id);
+  
+  res.json(result);
+});
+
 
 app.listen(port, () => {
   console.log(`Express server running on http://localhost:${port}`);
