@@ -22,12 +22,70 @@ async function testConnection() {
   return version;
 }
 
-async function selectFromTable(table, where = undefined) {
-  const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`SELECT * FROM ${sql.unsafe(table)} WHERE ${where != undefined ? where : "true"};`;
+// Users table
 
+async function createUser(identifier, user_name) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`INSERT INTO users (identifier, user_name) VALUES (${identifier}, ${user_name});`;
+  
   if (settings.DEBUG) {
-    console.log(`selectFromTable called on table ${table} where ${where}`);
+    console.log(response);
+  }
+
+  return response;
+}
+
+async function selectUserById(user_id) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`SELECT * FROM users WHERE user_id = ${user_id};`;
+  
+  if (settings.DEBUG) {
+    console.log(response);
+  }
+
+  return response;
+}
+
+async function deleteUserById(user_id) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`DELETE FROM users WHERE user_id = ${user_id};`;
+  
+  if (settings.DEBUG) {
+    console.log(response);
+  }
+
+  return response;
+}
+
+// Images table
+
+async function createImage(user_id, image_bytes) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`INSERT INTO images (user_id, image) VALUES (${user_id}, ${image_bytes});`;
+  
+  if (settings.DEBUG) {
+    console.log(response);
+  }
+
+  return response;
+}
+
+async function selectImageById(image_id) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`SELECT * FROM images WHERE image_id = ${image_id};`;
+  
+  if (settings.DEBUG) {
+    console.log(response);
+  }
+
+  return response;
+}
+
+async function deleteImageById(image_id) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`DELETE FROM images WHERE image_id = ${image_id};`;
+  
+  if (settings.DEBUG) {
     console.log(response);
   }
 
@@ -35,6 +93,13 @@ async function selectFromTable(table, where = undefined) {
 }
 
 module.exports = {
-  selectFromTable,
+  createUser,
+  selectUserById,
+  deleteUserById,
+  
+  createImage,
+  selectImageById,
+  deleteImageById,
+
   testConnection
 };

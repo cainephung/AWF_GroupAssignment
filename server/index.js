@@ -4,7 +4,7 @@ const settings = require("./settings.json");
 const app = express();
 const port = 3000;
 
-const { testConnection, selectFromTable } = require("./scripts/database");
+const { testConnection, createUser, selectUserById, deleteUserById, createImage, selectImageById, deleteImageById } = require("./scripts/database");
 
 app.get("/", async (req, res) => {
   if (settings.DEBUG == false) {
@@ -13,28 +13,60 @@ app.get("/", async (req, res) => {
   res.json(await testConnection());
 });
 
-// Example request localhost:port/get_images/1234/5678
-app.get("/get_images/:uid/:imgid?", async (req, res) => {
-  const user_id = req.params.uid;
-  const image_id = req.params.imgid; // This is optional and will be undefined if not provided
+// Users API
 
-  // Make call to database and get images then return files to user
-  const image_data = await getImagesFromDatabase(user_id, image_id); // array of { data: Buffer, mimeType: 'image/jpeg' }
-  if (!image_data) {
-    return res.status(404);
-  }
+app.get("/create_user/:identifier/:user_name", async (req, res) => {
+  const identifier = req.params.identifier;
+  const user_name = req.params.user_name;
 
-  // result = image_data.map((img) => ({
-  //   mimeType: img.mimeType,
-  //   base64: img.data.toString("base64"),
-  // }));
-
-  // res.json({ images: result });
-
-  res.send(
-    `I have no image to send you right now but your user id is ${user_id} and you requested ${image_id}`
-  );
+  const result = await createUser(identifier, user_name);
+  
+  res.json(result);
 });
+
+app.get("/get_user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+
+  const result = await selectUserById(user_id);
+  
+  res.json(result);
+});
+
+app.get("/delete_user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+
+  const result = await deleteUserById(user_id);
+  
+  res.json(result);
+});
+
+// Images API
+// Untested
+app.get("/create_image/:user_id/:image_bytes", async (req, res) => {
+  const user_id = req.params.identifier;
+  const image_bytes = req.params.image_bytes;
+
+  const result = await createImage(user_id, image_bytes);
+  
+  res.json(result);
+});
+
+app.get("/get_image/:image_id", async (req, res) => {
+  const image_id = req.params.image_id;
+
+  const result = await selectImageById(image_id);
+  
+  res.json(result);
+});
+
+app.get("/delete_image/:image_id", async (req, res) => {
+  const image_id = req.params.image_id;
+
+  const result = await deleteImageById(image_id);
+  
+  res.json(result);
+});
+
 
 app.listen(port, () => {
   console.log(`Express server running on http://localhost:${port}`);
