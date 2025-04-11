@@ -1,15 +1,16 @@
 const express = require("express");
 const settings = require("./settings.json");
-require('dotenv').config()
 
-const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
 const app = express();
 const port = 3000;
 
-const { getImagesFromDatabase, testConnection } = require("./scripts/database");
+const { testConnection, selectFromTable } = require("./scripts/database");
 
 app.get("/", async (req, res) => {
-  res.json(await testConnection())
+  if (settings.DEBUG == false) {
+    res.status(404);
+  }
+  res.json(await testConnection());
 });
 
 // Example request localhost:port/get_images/1234/5678

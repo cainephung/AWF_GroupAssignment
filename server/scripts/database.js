@@ -1,23 +1,40 @@
-require('dotenv').config();
-const { neon } = require('@neondatabase/serverless');
+var path = require('path');
+require('dotenv').config({ path: path.join(__dirname, "..", ".env") });
 const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
-// image_id could be a list of multiple id's or undefined in which case we
-//  can assume the user wants all images.
-//
-// This could be taxing so we should definitely consider pagination.
-async function getImagesFromDatabase(user_id, image_id = undefined) {
-  // No database yet, to be integrated
-  return [];
-}
+
+const settings = require("../settings.json");
+const { neon } = require('@neondatabase/serverless');
+
 
 async function testConnection() {
+  if (settings.DEBUG == false) {
+    return { undefined };
+  }
+  
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`SELECT version()`;
+  const response = await sql`SELECT version();`;
+  
+  
+  console.log("testConnection called");
+  console.log(response);
+
   const { version } = response[0];
   return version;
 }
 
+async function selectFromTable(table, where = undefined) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`SELECT * FROM ${sql.unsafe(table)} WHERE ${where != undefined ? where : "true"};`;
+
+  if (settings.DEBUG) {
+    console.log(`selectFromTable called on table ${table} where ${where}`);
+    console.log(response);
+  }
+
+  return response;
+}
+
 module.exports = {
-  getImagesFromDatabase,
+  selectFromTable,
   testConnection
 };
