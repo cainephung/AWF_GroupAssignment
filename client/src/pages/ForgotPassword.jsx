@@ -11,7 +11,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="auth-container">
+    <div className="container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2 className="auth-title">Forgot Password</h2>
         <p className="auth-description">

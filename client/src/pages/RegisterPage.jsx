@@ -23,7 +23,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="auth-container">
+    <div className="container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <label>Username</label>
         <input
