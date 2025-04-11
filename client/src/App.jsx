@@ -1,19 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import RegisterPage from "./pages/RegisterPage";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
 import SignInPage from "./pages/SignInPage";
-import ForgotPasswordPage from "./pages/ForgotPassword";
-import Header from "./assets/components/header";
-function App() {
+import RegisterPage from "./pages/RegisterPage";
+import './styles/global.css';
+
+export default function App() {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/signin" element={<SignInPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<SignInPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+    </Routes>
   );
 }
-
-export default App;
