@@ -4,7 +4,26 @@ const settings = require("./settings.json");
 const app = express();
 const port = 3000;
 
-const { testConnection, createUser, selectUserById, deleteUserById, createImage, selectImageById, deleteImageById } = require("./scripts/database");
+const { 
+  createUser,
+  selectUserById,
+  deleteUserById,
+  
+  createImage,
+  selectImageById,
+  deleteImageById,
+
+  createAlbum,
+  selectImageIdByAlbumId,
+  deleteAlbumById,
+  addImageToAlbum,
+
+  createTag,
+  selectImageIdByTagId,
+  deleteTagById,
+  addTagToImage,
+
+  testConnection } = require("./scripts/database");
 
 app.get("/", async (req, res) => {
   if (settings.DEBUG == false) {
@@ -63,6 +82,42 @@ app.get("/delete_image/:image_id", async (req, res) => {
   const image_id = req.params.image_id;
 
   const result = await deleteImageById(image_id);
+  
+  res.json(result);
+});
+
+// Albums API
+// Untested
+app.get("/create_album/:user_id/:album_name", async (req, res) => {
+  const user_id = req.params.identifier;
+  const album_name = req.params.album_name;
+
+  const result = await createAlbum(user_id, album_name);
+  
+  res.json(result);
+});
+
+app.get("/get_album_imageIds/:album_id", async (req, res) => {
+  const album_id = req.params.album_id;
+
+  const result = await selectImageIdByAlbumId(album_id);
+  
+  res.json(result);
+});
+
+app.get("/delete_image/:album_id", async (req, res) => {
+  const album_id = req.params.album_id;
+
+  const result = await deleteAlbumById(album_id);
+  
+  res.json(result);
+});
+
+app.get("/add_image_album/:album_id/:image_id", async (req, res) => {
+  const album_id = req.params.album_id;
+  const image_id = req.params.image_id;
+
+  const result = await addImageToAlbum(album_id, image_id);
   
   res.json(result);
 });
