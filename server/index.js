@@ -1,38 +1,173 @@
 const express = require("express");
 const settings = require("./settings.json");
+
 const app = express();
 const port = 3000;
 
-const { getImagesFromDatabase } = require("./scripts/database");
+const { 
+  createUser,
+  selectUserById,
+  deleteUserById,
+  
+  createImage,
+  selectImageById,
+  selectManyImageById,
+  deleteImageById,
 
-app.get("/", (req, res) => {
-  res.send(
-    '<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia1.tenor.com%2Fm%2FsW9GOo6TshcAAAAd%2Fevil-larry.gif&f=1&nofb=1&ipt=7925bf4ea209e6544363603f678cdc6ff9e99d12458d9f22c087df46176a2753&ipo=images" />'
-  );
-});
+  createAlbum,
+  selectImageIdByAlbumId,
+  deleteAlbumById,
+  addImageToAlbum,
 
-// Example request localhost:port/get_images/1234/5678
-app.get("/get_images/:uid/:imgid?", async (req, res) => {
-  const user_id = req.params.uid;
-  const image_id = req.params.imgid; // This is optional and will be undefined if not provided
+  createTag,
+  selectImageIdByTagId,
+  deleteTagById,
+  addTagToImage,
 
-  // Make call to database and get images then return files to user
-  const image_data = await getImagesFromDatabase(user_id, image_id); // array of { data: Buffer, mimeType: 'image/jpeg' }
-  if (!image_data) {
-    return res.status(404);
+  testConnection } = require("./scripts/database");
+
+app.get("/", async (req, res) => {
+  if (settings.DEBUG == false) {
+    res.status(404);
   }
-
-  // result = image_data.map((img) => ({
-  //   mimeType: img.mimeType,
-  //   base64: img.data.toString("base64"),
-  // }));
-
-  // res.json({ images: result });
-
-  res.send(
-    `I have no image to send you right now but your user id is ${user_id} and you requested ${image_id}`
-  );
+  res.json(await testConnection());
 });
+
+// Users API
+
+app.get("/create_user/:identifier/:user_name", async (req, res) => {
+  const identifier = req.params.identifier;
+  const user_name = req.params.user_name;
+
+  const result = await createUser(identifier, user_name);
+  
+  res.json(result);
+});
+
+app.get("/get_user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+
+  const result = await selectUserById(user_id);
+  
+  res.json(result);
+});
+
+app.get("/delete_user/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+
+  const result = await deleteUserById(user_id);
+  
+  res.json(result);
+});
+
+// Images API
+// Untested
+app.get("/create_image/:user_id/:image_bytes", async (req, res) => {
+  const user_id = req.params.identifier;
+  const image_bytes = req.params.image_bytes;
+
+  const result = await createImage(user_id, image_bytes);
+  
+  res.json(result);
+});
+
+app.get("/get_image/:image_id", async (req, res) => {
+  const image_id = req.params.image_id;
+
+  const result = await selectImageById(image_id);
+  
+  res.json(result);
+});
+
+app.get("/get_many_image/:image_ids", async (req, res) => {
+  // This should be multiple image ids comma separated (ex. 1,3,5,7)
+  const image_ids = req.params.image_ids;
+
+  const result = await selectImageById(image_ids);
+  
+  res.json(result);
+});
+
+app.get("/delete_image/:image_id", async (req, res) => {
+  const image_id = req.params.image_id;
+
+  const result = await deleteImageById(image_id);
+  
+  res.json(result);
+});
+
+// Albums API
+// Untested
+app.get("/create_album/:user_id/:album_name", async (req, res) => {
+  const user_id = req.params.identifier;
+  const album_name = req.params.album_name;
+
+  const result = await createAlbum(user_id, album_name);
+  
+  res.json(result);
+});
+
+app.get("/get_album_imageIds/:album_id", async (req, res) => {
+  const album_id = req.params.album_id;
+
+  const result = await selectImageIdByAlbumId(album_id);
+  
+  res.json(result);
+});
+
+app.get("/delete_image/:album_id", async (req, res) => {
+  const album_id = req.params.album_id;
+
+  const result = await deleteAlbumById(album_id);
+  
+  res.json(result);
+});
+
+app.get("/add_image_album/:album_id/:image_id", async (req, res) => {
+  const album_id = req.params.album_id;
+  const image_id = req.params.image_id;
+
+  const result = await addImageToAlbum(album_id, image_id);
+  
+  res.json(result);
+});
+
+// Tags API
+// Untested
+app.get("/create_tag/:user_id/:tag_name", async (req, res) => {
+  const user_id = req.params.identifier;
+  const tag_name = req.params.tag_name;
+
+  const result = await createTag(user_id, tag_name);
+  
+  res.json(result);
+});
+
+app.get("/get_tag_imageIds/:tag_id", async (req, res) => {
+  const tag_id = req.params.tag_id;
+
+  const result = await selectImageIdByTagId(tag_id);
+  
+  res.json(result);
+});
+
+app.get("/delete_image/:tag_id", async (req, res) => {
+  const tag_id = req.params.tag_id;
+
+  const result = await deleteTagById(tag_id);
+  
+  res.json(result);
+});
+
+app.get("/add_image_tag/:tag_id/:image_id", async (req, res) => {
+  const tag_id = req.params.tag_id;
+  const image_id = req.params.image_id;
+
+  const result = await addTagToImage(tag_id, image_id);
+  
+  res.json(result);
+});
+
 
 app.listen(port, () => {
   console.log(`Express server running on http://localhost:${port}`);
