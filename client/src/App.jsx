@@ -4,6 +4,7 @@ import SignInPage from "./pages/SignInPage";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import Header from "./assets/components/header";
 import PhotoSelector from "./pages/PhotoSelector";
+import Albums from "./pages/Album";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/photos" element={<PhotoSelector />} />
+        <Route path="/album" element={<Albums />} />
       </Routes>
     </Router>
   );
