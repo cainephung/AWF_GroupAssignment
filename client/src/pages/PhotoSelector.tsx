@@ -10,24 +10,30 @@ export default function PhotoSelector() {
     const [selected, setSelected] = useState("Photo1");
 
     return (
-        <div style={styles.grid}>
-            {photos.map((photo) => (
-                <div
-                    key={photo}
-                    style={{
-                        ...styles.photoBox,
-                        backgroundColor: selected === photo ? "#777" : "white",
-                        color: selected === photo ? "white" : "black",
-                    }}
-                    onClick={() => setSelected(photo)}
-                >
-                    <span style={styles.photoText}>{photo}</span>
-                </div>
-            ))}
+        <div className="auth-container">
+            <div style={styles.grid}>
+                {photos.map((photo) => (
+                    <div
+                        key={photo}
+                        style={{
+                            ...styles.photoBox,
+                            backgroundColor: selected === photo ? "#777" : "white",
+                            color: selected === photo ? "white" : "black",
+                        }}
+                        onClick={() => setSelected(photo)}
+                    >
+                        <span style={styles.photoText}>{photo}</span>
+                    </div>
+                ))}
+            </div>
+
+            <div style={styles.buttonRow}>
+                <button className="primary-btn">Create</button>
+                <button className="primary-btn">Share</button>
+            </div>
         </div>
     );
 }
-
 const styles = {
     grid: {
         display: "grid",
@@ -50,5 +56,9 @@ const styles = {
     },
     photoText: {
         pointerEvents: "none" as const,
+    },
+    buttonRow: {
+        display: "flex",
+        gap: "20px",
     },
 };
