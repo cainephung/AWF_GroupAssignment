@@ -3,14 +3,18 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import "../../styles/global.css";
 
+// Imports for navbar navigation
+import Photos from "../../pages/PhotoPage";
+import Albums from "../../pages/AlbumPage";
+
 export default function NavBar() {
   const navigate = useNavigate();
 
   const navItems = [
-    { label: "Option1", path: "/option1" },
-    { label: "Option2", path: "/option2" },
+    { label: "Photos", path: "/photos" },
+    { label: "Album", path: "/albums" },
     { label: "Option3", path: "/option3" },
-    { label: "Option4", path: "/option3" },
+    { label: "Settings", path: "/option4" },
   ];
 
   return (
