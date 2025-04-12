@@ -6,7 +6,7 @@ const photos = [
     "Photo6", "Photo7", "Photo8", "Photo9", "Photo10"
 ];
 
-export default function PhotoSelector() {
+export default function Photos() {
     const [selected, setSelected] = useState("Photo1");
 
     return (
@@ -28,7 +28,7 @@ export default function PhotoSelector() {
             </div>
 
             <div style={styles.buttonRow}>
-                <button className="primary-btn">Create</button>
+                <button className="primary-btn">Upload</button>
                 <button className="primary-btn">Share</button>
             </div>
         </div>
