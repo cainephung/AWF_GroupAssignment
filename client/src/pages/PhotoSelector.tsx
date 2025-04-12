@@ -10,12 +10,45 @@ export default function PhotoSelector() {
     const [selected, setSelected] = useState("Photo1");
 
     return (
-        <div>
+        <div style={styles.grid}>
             {photos.map((photo) => (
-                <div key={photo} onClick={() => setSelected(photo)}>
-                    {photo}
+                <div
+                    key={photo}
+                    style={{
+                        ...styles.photoBox,
+                        backgroundColor: selected === photo ? "#777" : "white",
+                        color: selected === photo ? "white" : "black",
+                    }}
+                    onClick={() => setSelected(photo)}
+                >
+                    <span style={styles.photoText}>{photo}</span>
                 </div>
             ))}
         </div>
     );
 }
+
+const styles = {
+    grid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(5, 150px)",
+        gap: "20px",
+        justifyContent: "center",
+        marginBottom: "40px",
+    },
+    photoBox: {
+        width: "150px",
+        height: "150px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontWeight: "bold",
+        fontSize: "20px",
+        borderRadius: "8px",
+        cursor: "pointer",
+        transition: "0.2s ease",
+    },
+    photoText: {
+        pointerEvents: "none" as const,
+    },
+};
