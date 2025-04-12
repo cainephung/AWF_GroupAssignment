@@ -3,8 +3,8 @@ import RegisterPage from "./pages/RegisterPage";
 import SignInPage from "./pages/SignInPage";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import Header from "./assets/components/header";
-import Photos from "./pages/PhotoSelector";
-import Albums from "./pages/Album";
+import Photos from "./pages/PhotoPage";
+import Albums from "./pages/AlbumPage";
 
 function App() {
   return (
