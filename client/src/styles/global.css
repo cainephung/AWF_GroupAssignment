@@ -171,3 +171,79 @@
 .nav-list li:hover {
   background-color: #eaeaea;
 }
+
+/* AlbumPage Styling */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 150px);
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.album-box {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  background-color: white;
+  color: black;
+}
+
+.album-box.selected {
+  background-color: #777;
+  color: white;
+}
+
+.album-text {
+  pointer-events: none;
+}
+
+.button-row {
+  display: flex;
+  gap: 20px;
+}
+
+/* PhotoPage Styling */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 150px);
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.photo-box {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  background-color: white;
+  color: black;
+}
+
+.photo-box.selected {
+  background-color: #777;
+  color: white;
+}
+
+.photo-text {
+  pointer-events: none;
+}
+
+.button-row {
+  display: flex;
+  gap: 20px;
+}
