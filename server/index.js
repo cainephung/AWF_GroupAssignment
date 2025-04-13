@@ -2,8 +2,6 @@ const express = require("express");
 const settings = require("./settings.json");
 
 const app = express();
-const port = 3000;
-
 const { 
   createUser,
   selectUserById,
@@ -168,7 +166,4 @@ app.get("/add_image_tag/:tag_id/:image_id", async (req, res) => {
   res.json(result);
 });
 
-
-app.listen(port, () => {
-  console.log(`Express server running on http://localhost:${port}`);
-});
+module.exports = app;
