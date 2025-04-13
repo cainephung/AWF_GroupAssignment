@@ -3,6 +3,8 @@ import RegisterPage from "./pages/RegisterPage";
 import SignInPage from "./pages/SignInPage";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import Header from "./assets/components/header";
+import ProtectedRoute from "./assets/components/ProtectedRoute";
+import HomePage from "./pages/HomePage";
 import Photos from "./pages/PhotoPage";
 import Albums from "./pages/AlbumPage";
 
@@ -16,6 +18,14 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/photos" element={<Photos />} />
         <Route path="/albums" element={<Albums />} />
+        <Route
+          path="/"
+          element={
+            // <ProtectedRoute>
+            <HomePage />
+            // </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
