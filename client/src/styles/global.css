@@ -172,14 +172,6 @@
   background-color: #eaeaea;
 }
 
-.album-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 150px);
-  gap: 20px;
-  justify-content: center;
-  margin-bottom: 40px;
-}
-
 .box {
   width: 150px;
   height: 150px;
