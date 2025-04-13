@@ -19,5 +19,25 @@ export default function CreateAlbumPage() {
                 ? prev.filter((p) => p !== photo)
                 : [...prev, photo]
         );
+
+        const handleCreate = () => {
+            if (!albumTitle.trim()) {
+                alert("Please enter a valid album title.");
+                return;
+            }
+            if (selectedPhotos.length === 0) {
+                alert("Please select at least one photo.");
+                return;
+            }
+
+            console.log("New Album:", {
+                title: albumTitle,
+                photos: selectedPhotos,
+            });
+
+            alert(`Album "${albumTitle}" created with ${selectedPhotos.length} photo(s)!`);
+            // navgiate back to /album
+            navigate("/");
+        };
     };
 }
