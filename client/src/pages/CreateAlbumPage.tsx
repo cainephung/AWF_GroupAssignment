@@ -9,4 +9,15 @@ const dummyPhotos = [
 ];
 
 export default function CreateAlbumPage() {
+    const [albumTitle, setAlbumTitle] = useState("");
+    const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
+    const navigate = useNavigate();
+
+    const togglePhoto = (photo) => {
+        setSelectedPhotos((prev) =>
+            prev.includes(photo)
+                ? prev.filter((p) => p !== photo)
+                : [...prev, photo]
+        );
+    };
 }
