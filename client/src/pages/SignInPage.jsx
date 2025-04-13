@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/global.css";
 import React from "react";
+import axios from "axios";
 
 export default function SignInPage() {
   const navigate = useNavigate();
@@ -15,13 +16,24 @@ export default function SignInPage() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Sign In Submitted", formData);
+
+    try {
+      const res = await axios.post("http://localhost:3000/login", {
+        username: formData.username,
+        password: formData.password,
+      });
+
+      localStorage.setItem("token", res.data.token);
+      navigate("/"); // go to home or dashboard
+    } catch (err) {
+      alert("Login failed: " + (err.response?.data?.error || err.message));
+    }
   };
 
   return (
-    <div className="auth-container">
+    <div className="container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <label>Username</label>
         <input
