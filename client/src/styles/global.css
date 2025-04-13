@@ -170,3 +170,40 @@
 .nav-list li:hover {
   background-color: #eaeaea;
 }
+
+.box {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  background-color: white;
+  color: black;
+}
+
+.box.selected {
+  background-color: #777;
+  color: white;
+}
+
+.text {
+  pointer-events: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 150px);
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.button-row {
+  display: flex;
+  gap: 20px;
+}
