@@ -12,11 +12,11 @@ export default function Albums() {
 
     return (
         <div className="auth-container">
-            <div className="album-grid">
+            <div className="grid">
                 {photos.map((photo) => (
                     <div
                         key={photo}
-                        className={`album-box ${selected === photo ? "selected" : ""}`}
+                        className={`box ${selected === photo ? "selected" : ""}`}
                         onClick={() => setSelected(photo)}
                     >
                         <span className="album-text">{photo}</span>
