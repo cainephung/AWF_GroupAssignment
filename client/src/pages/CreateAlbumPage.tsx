@@ -19,26 +19,26 @@ export default function CreateAlbumPage() {
                 ? prev.filter((p) => p !== photo)
                 : [...prev, photo]
         );
+    };
 
-        const handleCreate = () => {
-            if (!albumTitle.trim()) {
-                alert("Please enter a valid album title.");
-                return;
-            }
-            if (selectedPhotos.length === 0) {
-                alert("Please select at least one photo.");
-                return;
-            }
+    const handleCreate = () => {
+        if (!albumTitle.trim()) {
+            alert("Please enter a valid album title.");
+            return;
+        }
+        if (selectedPhotos.length === 0) {
+            alert("Please select at least one photo.");
+            return;
+        }
 
-            console.log("New Album:", {
-                title: albumTitle,
-                photos: selectedPhotos,
-            });
+        console.log("New Album:", {
+            title: albumTitle,
+            photos: selectedPhotos,
+        });
 
-            alert(`Album "${albumTitle}" created with ${selectedPhotos.length} photo(s)!`);
-            // navgiate back to /album
-            navigate("/");
-        };
+        alert(`Album "${albumTitle}" created with ${selectedPhotos.length} photo(s)!`);
+        // navgiate back to /album
+        navigate("/");
     };
 
     return (
@@ -70,3 +70,29 @@ export default function CreateAlbumPage() {
         </div>
     );
 }
+
+const styles: {
+    pageTitle: React.CSSProperties;
+    inputField: React.CSSProperties;
+    container?: React.CSSProperties;
+} = {
+    pageTitle: {
+        color: "#ff8000",
+        fontSize: "24px",
+        fontWeight: "bold",
+        marginBottom: "12px",
+        textAlign: "center",
+    },
+    inputField: {
+        marginTop: "-50x",
+        marginBottom: "20px",
+        padding: "10px",
+        fontSize: "16px",
+        width: "300px",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+        display: "block",
+        marginLeft: "auto",
+        marginRight: "auto",
+    },
+};
