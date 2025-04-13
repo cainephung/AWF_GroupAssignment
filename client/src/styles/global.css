@@ -172,7 +172,6 @@
   background-color: #eaeaea;
 }
 
-/* AlbumPage Styling */
 .album-grid {
   display: grid;
   grid-template-columns: repeat(5, 150px);
@@ -205,7 +204,6 @@
   pointer-events: none;
 }
 
-/* PhotoPage Styling */
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 150px);
