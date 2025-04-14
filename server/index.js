@@ -29,6 +29,7 @@ const {
   addTagToImage,
 
   testConnection,
+  selectManyImageByUserId,
 } = require("./scripts/database");
 
 app.get("/", async (req, res) => {
@@ -89,6 +90,14 @@ app.get("/get_many_image/:image_ids", async (req, res) => {
   const image_ids = req.params.image_ids;
 
   const result = await selectImageById(image_ids);
+
+  res.json(result);
+});
+
+app.get("/get_many_image_uid/:user_id", async (req, res) => {
+  const user_id = req.params.user_id;
+
+  const result = await selectManyImageByUserId(user_id);
 
   res.json(result);
 });
