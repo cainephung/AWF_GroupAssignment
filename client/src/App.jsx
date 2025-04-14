@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./assets/components/header";
 import RegisterPage from "./pages/RegisterPage";
@@ -8,9 +7,9 @@ import HomePage from "./pages/HomePage";
 import Photos from "./pages/PhotoPage";
 import Albums from "./pages/AlbumPage";
 import CreateAlbumPage from "./pages/CreateAlbumPage";
-// Protected Route 
+// Protected Route
 import ProtectedRoute from "./assets/components/ProtectedRoute";
-
+import DisplayPhoto from "./pages/DisplayPhoto";
 
 function App() {
   return (
@@ -22,9 +21,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/photos" element={<Photos />} />
         <Route path="/albums" element={<Albums />} />
-
+        <Route path="/photo/:name" element={<DisplayPhoto />} />
         <Route path="/create" element={<CreateAlbumPage />} />
-
 
         <Route
           path="/"
