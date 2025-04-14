@@ -1,29 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/global.css";
 import { useNavigate } from "react-router-dom";
 
-// Dummy albums for demonstration
-const photos = ["Album1", "Album2", "Album3", "Album4", "Album5"];
-
-
 export default function Albums() {
-
-    // State to track which albums is currently selected
-    const [selected, setSelected] = useState("Album1");
-
-    // useNavigate
+    const [albums, setAlbums] = useState<string[]>([]);
     const navigate = useNavigate();
+    const userId = "5";
+
+    useEffect(() => {
+        const fetchAlbums = async () => {
+            try {
+                const res = await fetch(`http://localhost:3000/get_albums/${userId}`);
+                const data = await res.json();
+                const albumNames = data.map((item: any) => item.album_name);
+                setAlbums(albumNames);
+            } catch (err) {
+                console.error("Failed to fetch albums:", err);
+            }
+        };
+
+        fetchAlbums();
+    }, []);
+
+    const handleAlbumClick = (albumName: string) => {
+        navigate(`/album/${encodeURIComponent(albumName)}`);
+    };
 
     return (
         <div className="container">
             <div className="grid">
-                {photos.map((photo) => (
+                {albums.map((album) => (
                     <div
-                        key={photo}
-                        className={`box ${selected === photo ? "selected" : ""}`}
-                        onClick={() => setSelected(photo)}
+                        key={album}
+                        className="box"
+                        onClick={() => handleAlbumClick(album)}
                     >
-                        <span className="album-text">{photo}</span>
+                        <span className="album-text">{album}</span>
                     </div>
                 ))}
             </div>
@@ -31,7 +43,6 @@ export default function Albums() {
             <div className="button-row">
                 <button
                     className="primary-btn"
-                    // button navigates towards CreateAlbumPage
                     onClick={() => navigate("/create")}
                 >
                     Create
