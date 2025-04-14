@@ -36,7 +36,7 @@ const {
   testConnection,
 } = require("./scripts/database");
 
-// Debug/Test connection
+// Debug route
 app.get("/", async (req, res) => {
   if (!settings.DEBUG) return res.sendStatus(404);
   res.json(await testConnection());
@@ -80,7 +80,7 @@ app.post("/create_image", upload.single("image"), async (req, res) => {
   }
 
   try {
-    const result = await createImage(user_id, imageBuffer);
+    await createImage(user_id, imageBuffer);
     res.send("Image uploaded to DB");
   } catch (err) {
     console.error(err);
@@ -98,10 +98,55 @@ app.get("/delete_image/:image_id", async (req, res) => {
   res.json(result);
 });
 
-// Albums API
+// Create Album
 app.get("/create_album/:user_id/:album_name", async (req, res) => {
-  const result = await createAlbum(req.params.user_id, req.params.album_name);
-  res.json(result);
+  try {
+    const { user_id, album_name } = req.params;
+    const album_id = await createAlbum(user_id, album_name);
+    res.json({ album_id });
+  } catch (err) {
+    console.error("Error creating album:", err);
+    res.status(500).json({ error: "Failed to create album" });
+  }
+});
+
+app.post("/add_images_to_album", async (req, res) => {
+  const { user_id, album_id, photo_base64_list } = req.body;
+
+  try {
+    const response = await sql`
+      SELECT image_id, encode(image, 'base64') AS base64 FROM images
+      WHERE user_id = ${user_id};
+    `;
+
+    const base64ToId = {};
+    response.forEach(row => {
+      base64ToId[`data:image/png;base64,${row.base64}`] = row.image_id;
+    });
+
+    for (const photo of photo_base64_list) {
+      const imageId = base64ToId[photo];
+      if (imageId) {
+        await addImageToAlbum(album_id, imageId);
+      }
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error in /add_images_to_album:", err);
+    res.status(500).json({ error: "Failed to associate images with album." });
+  }
+});
+
+// Album viewer
+app.get("/get_albums/:user_id", async (req, res) => {
+  try {
+    const result = await sql`SELECT album_name FROM albums WHERE user_id = ${req.params.user_id}`;
+    res.json(result.map(r => ({ album_name: r.album_name })));
+  } catch (err) {
+    console.error("Failed to fetch albums:", err);
+    res.status(500).send("Failed to load albums");
+  }
 });
 
 app.get("/get_albums/:user_id", async (req, res) => {
