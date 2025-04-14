@@ -10,6 +10,18 @@
   color: #000;
 }
 
+.center-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: calc(100vh - 120px);
+  /* Remaining height under header/nav */
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .auth-header {
   position: fixed;
   top: 0;
