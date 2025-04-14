@@ -15,30 +15,28 @@ export default function Albums() {
     const navigate = useNavigate();
 
     return (
-        <div className="auth-container">
-            <div className="center-wrapper">
-                <div className="grid">
-                    {photos.map((photo) => (
-                        <div
-                            key={photo}
-                            className={`box ${selected === photo ? "selected" : ""}`}
-                            onClick={() => setSelected(photo)}
-                        >
-                            <span className="album-text">{photo}</span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="button-row">
-                    <button
-                        className="primary-btn"
-                        // button navigates towards CreateAlbumPage
-                        onClick={() => navigate("/create")}
+        <div className="container">
+            <div className="grid">
+                {photos.map((photo) => (
+                    <div
+                        key={photo}
+                        className={`box ${selected === photo ? "selected" : ""}`}
+                        onClick={() => setSelected(photo)}
                     >
-                        Create
-                    </button>
-                    <button className="primary-btn">Share</button>
-                </div>
+                        <span className="album-text">{photo}</span>
+                    </div>
+                ))}
+            </div>
+
+            <div className="button-row">
+                <button
+                    className="primary-btn"
+                    // button navigates towards CreateAlbumPage
+                    onClick={() => navigate("/create")}
+                >
+                    Create
+                </button>
+                <button className="primary-btn">Share</button>
             </div>
         </div>
     );

@@ -42,8 +42,11 @@ export default function CreateAlbumPage() {
     };
 
     return (
-        <div className="auth-container">
-            <h2 style={styles.pageTitle}>Create Album</h2>
+        <div className="container">
+            <h2 style={styles.pageTitle}>
+                <span style={{ color: "#000" }}>Create </span>
+                <span style={{ color: "#ff8000" }}>Album</span>
+            </h2>
 
             <input
                 style={styles.inputField}
