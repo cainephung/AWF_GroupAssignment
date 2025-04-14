@@ -1,11 +1,8 @@
-// imports
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// Header
 import Header from "./assets/components/header";
-//Login/Register
 import RegisterPage from "./pages/RegisterPage";
 import SignInPage from "./pages/SignInPage";
-// Pages
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import HomePage from "./pages/HomePage";
 import Photos from "./pages/PhotoPage";
@@ -25,7 +22,10 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/photos" element={<Photos />} />
         <Route path="/albums" element={<Albums />} />
+
         <Route path="/create" element={<CreateAlbumPage />} />
+
+
         <Route
           path="/"
           element={
