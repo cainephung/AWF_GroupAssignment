@@ -8,6 +8,8 @@ export default function CreateAlbumPage() {
     const [availablePhotos, setAvailablePhotos] = useState<string[]>([]);
     const navigate = useNavigate();
     const userId = "5";
+    const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+
 
     useEffect(() => {
         const fetchPhotos = async () => {
@@ -24,12 +26,12 @@ export default function CreateAlbumPage() {
         fetchPhotos();
     }, []);
 
-    const togglePhoto = (photo: string) => {
-        setSelectedPhotos((prev) =>
-            prev.includes(photo)
-                ? prev.filter((p) => p !== photo)
-                : [...prev, photo]
-        );
+    const togglePhoto = (index: number) => {
+      setSelectedIndices((prev) =>
+        prev.includes(index)
+          ? prev.filter((i) => i !== index)
+          : [...prev, index]
+      );
     };
 
     const handleCreate = async () => {
@@ -37,7 +39,7 @@ export default function CreateAlbumPage() {
             alert("Please enter a valid album title.");
             return;
         }
-        if (selectedPhotos.length === 0) {
+        if (selectedIndices.length === 0) {
             alert("Please select at least one photo.");
             return;
         }
@@ -57,11 +59,11 @@ export default function CreateAlbumPage() {
                 body: JSON.stringify({
                     user_id: userId,
                     album_id: albumId,
-                    photo_base64_list: selectedPhotos
+                   photo_base64_list: selectedIndices.map(i => availablePhotos[i])
                 }),
             });
 
-            alert(`Album "${albumTitle}" $album_id created with ${selectedPhotos.length} photo(s)!`);
+            alert(`Album "${albumTitle}" created with ${selectedIndices.length} photo(s)!`);
             navigate("/");
         } catch (err) {
             console.error("Failed to create album:", err);
@@ -96,33 +98,33 @@ export default function CreateAlbumPage() {
                 }}
             >
                 {availablePhotos.map((photo, index) => {
-                    const isSelected = selectedPhotos.includes(photo);
-                    return (
-                        <div
-                            key={index}
-                            onClick={() => togglePhoto(photo)}
-                            style={{
-                                border: isSelected ? "4px solid #ff8000" : "1px solid #ccc",
-                                boxShadow: isSelected ? "0 0 10px #ff8000" : "none",
-                                borderRadius: "8px",
-                                overflow: "hidden",
-                                cursor: "pointer",
-                                transform: isSelected ? "scale(1.05)" : "scale(1)",
-                                transition: "all 0.2s ease-in-out",
-                            }}
-                        >
-                            <img
-                                src={photo}
-                                alt={`Photo ${index}`}
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                    display: "block",
-                                }}
-                            />
-                        </div>
-                    );
+                  const isSelected = selectedIndices.includes(index);
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => togglePhoto(index)}
+                      style={{
+                        border: isSelected ? "4px solid #ff8000" : "1px solid #ccc",
+                        boxShadow: isSelected ? "0 0 10px #ff8000" : "none",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        transform: isSelected ? "scale(1.05)" : "scale(1)",
+                        transition: "all 0.2s ease-in-out",
+                      }}
+                    >
+                      <img
+                        src={photo}
+                        alt={`Photo ${index}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          display: "block",
+                        }}
+                      />
+                    </div>
+                  );
                 })}
             </div>
 
