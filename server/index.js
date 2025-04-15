@@ -176,23 +176,28 @@ app.get("/get_album_images/:album_name", async (req, res) => {
       return res.json({ images: [] });
     }
 
-    const image_id = imageIdRow[0].image_id;
+    // Step 3: Loop through each image_id, fetch and convert image
+    const base64Images = [];
 
-    // Step 3: Get the raw image bytea value for the image_id
-    const imageRow = await sql`
-      SELECT image FROM images WHERE image_id = ${image_id}
-    `;
+    for (const row of imageIdRow) {
+      const imageId = row.image_id;
 
-    // If no image found for the image_id
-    if (imageRow.length === 0) {
-      return res.status(404).json({ error: "Image not found" });
+      const imageResult = await sql`
+        SELECT image FROM images WHERE image_id = ${imageId}
+      `;
+
+      if (imageResult.length === 0) {
+        console.warn(`Image not found for image_id ${imageId}`);
+        continue; // Skip this one and keep going
+      }
+
+      const buffer = imageResult[0].image;
+      const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
+      base64Images.push(base64Image);
     }
 
-    // Step 4: Convert bytea (Buffer) to base64 in JS
-    const buffer = imageRow[0].image;
-    const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
-
-    res.json({ images: [base64Image] });
+// Step 4: Send back all images
+res.json({ images: base64Images });
 
   } catch (err) {
     console.error("Error in /get_album_images:", err);
