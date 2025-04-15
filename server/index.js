@@ -116,27 +116,29 @@ app.post("/add_images_to_album", async (req, res) => {
   const { user_id, album_id, photo_base64_list } = req.body;
 
   try {
-    const response = await sql`
-      SELECT image_id, encode(image, 'base64') AS base64 FROM images
-      WHERE user_id = ${user_id};
-    `;
-
-    const base64ToId = {};
-    response.forEach(row => {
-      base64ToId[`data:image/png;base64,${row.base64}`] = row.image_id;
-    });
-
     for (const photo of photo_base64_list) {
-      const imageId = base64ToId[photo];
-      if (imageId) {
-        await addImageToAlbum(album_id, imageId);
-      }
+      const base64Data = photo.replace(/^data:image\/\w+;base64,/, ""); // remove data:image/png;base64,
+      const buffer = Buffer.from(base64Data, "base64");
+
+      // Insert image and get the ID
+      const inserted = await sql`
+        INSERT INTO images (user_id, image)
+        VALUES (${user_id}, ${buffer})
+        RETURNING image_id;
+      `;
+      const imageId = inserted[0].image_id;
+
+      // Associate with album
+      await sql`
+        INSERT INTO image_album (album_id, image_id)
+        VALUES (${album_id}, ${imageId});
+      `;
     }
 
     res.json({ success: true });
   } catch (err) {
     console.error("Error in /add_images_to_album:", err);
-    res.status(500).json({ error: "Failed to associate images with album." });
+    res.status(500).json({ error: "Failed to insert and associate images." });
   }
 });
 
@@ -148,6 +150,53 @@ app.get("/get_albums/:user_id", async (req, res) => {
   } catch (err) {
     console.error("Failed to fetch albums:", err);
     res.status(500).send("Failed to load albums");
+  }
+});
+
+app.get("/get_album_images/:album_name", async (req, res) => {
+  try {
+    const { album_name } = req.params;
+
+    // Step 1: Get album_id
+    const album = await sql`
+      SELECT album_id FROM albums WHERE album_name = ${album_name}
+    `;
+    if (album.length === 0) {
+      return res.status(404).json({ error: "Album not found" });
+    }
+    const album_id = album[0].album_id;
+
+    // Step 2: Get image_id associated with the album
+    const imageIdRow = await sql`
+      SELECT image_id FROM image_album WHERE album_id = ${album_id}
+    `;
+
+    // If no image_id found for this album
+    if (imageIdRow.length === 0) {
+      return res.json({ images: [] });
+    }
+
+    const image_id = imageIdRow[0].image_id;
+
+    // Step 3: Get the raw image bytea value for the image_id
+    const imageRow = await sql`
+      SELECT image FROM images WHERE image_id = ${image_id}
+    `;
+
+    // If no image found for the image_id
+    if (imageRow.length === 0) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    // Step 4: Convert bytea (Buffer) to base64 in JS
+    const buffer = imageRow[0].image;
+    const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
+
+    res.json({ images: [base64Image] });
+
+  } catch (err) {
+    console.error("Error in /get_album_images:", err);
+    res.status(500).json({ error: "Failed to get album images." });
   }
 });
 

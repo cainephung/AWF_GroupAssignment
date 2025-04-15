@@ -48,7 +48,7 @@ export default function CreateAlbumPage() {
             const res = await fetch(`http://localhost:3000/create_album/${userId}/${encodedTitle}`);
             const data = await res.json();
 
-            const albumId = data.album_id;
+            const albumId = data.album_id[0]?.album_id;
             if (!albumId) throw new Error("No album ID returned");
 
             await fetch("http://localhost:3000/add_images_to_album", {
@@ -61,7 +61,7 @@ export default function CreateAlbumPage() {
                 }),
             });
 
-            alert(`Album "${albumTitle}" created with ${selectedPhotos.length} photo(s)!`);
+            alert(`Album "${albumTitle}" $album_id created with ${selectedPhotos.length} photo(s)!`);
             navigate("/");
         } catch (err) {
             console.error("Failed to create album:", err);

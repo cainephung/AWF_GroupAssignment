@@ -120,8 +120,12 @@ async function deleteImageById(image_id) {
 // Untested
 async function createAlbum(user_id, album_name) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response =
-    await sql`INSERT INTO albums (user_id, album_name) VALUES (${user_id}, ${album_name});`;
+
+const response = await sql`
+  INSERT INTO albums (user_id, album_name)
+  VALUES (${user_id}, ${album_name})
+  RETURNING album_id;
+`;
 
   if (settings.DEBUG) {
     console.log(response);
