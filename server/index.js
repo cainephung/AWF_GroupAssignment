@@ -12,6 +12,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 const sql = neon(CONNECTION_STRING);
 
 app.use(cors());
+app.use(express.json());
+
 
 const {
   createUser,
