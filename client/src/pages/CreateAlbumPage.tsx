@@ -1,49 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/global.css";
-
-// Dummy photos
-const dummyPhotos = [
-    "Photo1", "Photo2", "Photo3", "Photo4", "Photo5",
-    "Photo6", "Photo7", "Photo8", "Photo9", "Photo10"
-];
 
 export default function CreateAlbumPage() {
     const [albumTitle, setAlbumTitle] = useState("");
     const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
+    const [availablePhotos, setAvailablePhotos] = useState<string[]>([]);
     const navigate = useNavigate();
+    const userId = "5";
+    const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
 
-    const togglePhoto = (photo) => {
-        setSelectedPhotos((prev) =>
-            prev.includes(photo)
-                ? prev.filter((p) => p !== photo)
-                : [...prev, photo]
-        );
+
+    useEffect(() => {
+        const fetchPhotos = async () => {
+            try {
+                const res = await fetch(`http://localhost:3000/get_user_images/${userId}`);
+                const data = await res.json();
+                const base64List = data.map((item: any) => `data:image/png;base64,${item.image}`);
+                setAvailablePhotos(base64List);
+            } catch (err) {
+                console.error("Failed to load photos:", err);
+            }
+        };
+
+        fetchPhotos();
+    }, []);
+
+    const togglePhoto = (index: number) => {
+      setSelectedIndices((prev) =>
+        prev.includes(index)
+          ? prev.filter((i) => i !== index)
+          : [...prev, index]
+      );
     };
 
-    const handleCreate = () => {
+    const handleCreate = async () => {
         if (!albumTitle.trim()) {
             alert("Please enter a valid album title.");
             return;
         }
-        if (selectedPhotos.length === 0) {
+        if (selectedIndices.length === 0) {
             alert("Please select at least one photo.");
             return;
         }
 
-        console.log("New Album:", {
-            title: albumTitle,
-            photos: selectedPhotos,
-        });
+        try {
+            const encodedTitle = encodeURIComponent(albumTitle);
 
-        alert(`Album "${albumTitle}" created with ${selectedPhotos.length} photo(s)!`);
-        // navgiate back to /album
-        navigate("/");
+            const res = await fetch(`http://localhost:3000/create_album/${userId}/${encodedTitle}`);
+            const data = await res.json();
+
+            const albumId = data.album_id[0]?.album_id;
+            if (!albumId) throw new Error("No album ID returned");
+
+            await fetch("http://localhost:3000/add_images_to_album", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: userId,
+                    album_id: albumId,
+                   photo_base64_list: selectedIndices.map(i => availablePhotos[i])
+                }),
+            });
+
+            alert(`Album "${albumTitle}" created with ${selectedIndices.length} photo(s)!`);
+            navigate("/");
+        } catch (err) {
+            console.error("Failed to create album:", err);
+            alert("Error creating album");
+        }
     };
 
+
     return (
-        <div className="auth-container">
-            <h2 style={styles.pageTitle}>Create Album</h2>
+        <div className="container">
+            <h2 style={styles.pageTitle}>
+                <span style={{ color: "#000" }}>Create </span>
+                <span style={{ color: "#ff8000" }}>Album</span>
+            </h2>
 
             <input
                 style={styles.inputField}
@@ -52,16 +86,46 @@ export default function CreateAlbumPage() {
                 onChange={(e) => setAlbumTitle(e.target.value)}
             />
 
-            <div className="grid">
-                {dummyPhotos.map((photo) => (
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
+                    gap: "16px",
+                    padding: "20px",
+                    width: "100%",
+                    maxWidth: "900px",
+                    margin: "0 auto",
+                }}
+            >
+                {availablePhotos.map((photo, index) => {
+                  const isSelected = selectedIndices.includes(index);
+                  return (
                     <div
-                        key={photo}
-                        className={`box ${selectedPhotos.includes(photo) ? "selected" : ""}`}
-                        onClick={() => togglePhoto(photo)}
+                      key={index}
+                      onClick={() => togglePhoto(index)}
+                      style={{
+                        border: isSelected ? "4px solid #ff8000" : "1px solid #ccc",
+                        boxShadow: isSelected ? "0 0 10px #ff8000" : "none",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        transform: isSelected ? "scale(1.05)" : "scale(1)",
+                        transition: "all 0.2s ease-in-out",
+                      }}
                     >
-                        <span className="album-text">{photo}</span>
+                      <img
+                        src={photo}
+                        alt={`Photo ${index}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          display: "block",
+                        }}
+                      />
                     </div>
-                ))}
+                  );
+                })}
             </div>
 
             <button className="primary-btn" onClick={handleCreate}>
@@ -74,7 +138,6 @@ export default function CreateAlbumPage() {
 const styles: {
     pageTitle: React.CSSProperties;
     inputField: React.CSSProperties;
-    container?: React.CSSProperties;
 } = {
     pageTitle: {
         color: "#ff8000",
@@ -84,7 +147,7 @@ const styles: {
         textAlign: "center",
     },
     inputField: {
-        marginTop: "-50x",
+        marginTop: "-50px",
         marginBottom: "20px",
         padding: "10px",
         fontSize: "16px",

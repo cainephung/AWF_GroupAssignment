@@ -1,20 +1,18 @@
-var path = require('path');
-require('dotenv').config({ path: path.join(__dirname, "..", ".env") });
+var path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
 
 const settings = require("../settings.json");
-const { neon } = require('@neondatabase/serverless');
-
+const { neon } = require("@neondatabase/serverless");
 
 async function testConnection() {
   if (settings.DEBUG == false) {
     return { undefined };
   }
-  
+
   const sql = neon(`${CONNECTION_STRING}`);
   const response = await sql`SELECT version();`;
-  
-  
+
   console.log("testConnection called");
   console.log(response);
 
@@ -26,8 +24,9 @@ async function testConnection() {
 
 async function createUser(identifier, user_name) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`INSERT INTO users (identifier, user_name) VALUES (${identifier}, ${user_name});`;
-  
+  const response =
+    await sql`INSERT INTO users (identifier, user_name) VALUES (${identifier}, ${user_name});`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -38,7 +37,7 @@ async function createUser(identifier, user_name) {
 async function selectUserById(user_id) {
   const sql = neon(`${CONNECTION_STRING}`);
   const response = await sql`SELECT * FROM users WHERE user_id = ${user_id};`;
-  
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -49,7 +48,7 @@ async function selectUserById(user_id) {
 async function deleteUserById(user_id) {
   const sql = neon(`${CONNECTION_STRING}`);
   const response = await sql`DELETE FROM users WHERE user_id = ${user_id};`;
-  
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -61,8 +60,9 @@ async function deleteUserById(user_id) {
 // Untested
 async function createImage(user_id, image_bytes) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`INSERT INTO images (user_id, image) VALUES (${user_id}, ${image_bytes});`;
-  
+  const response =
+    await sql`INSERT INTO images (user_id, image) VALUES (${user_id}, ${image_bytes});`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -72,8 +72,9 @@ async function createImage(user_id, image_bytes) {
 
 async function selectImageById(image_id) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`SELECT * FROM images WHERE image_id = ${image_id};`;
-  
+  const response =
+    await sql`SELECT * FROM images WHERE image_id = ${image_id};`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -83,8 +84,20 @@ async function selectImageById(image_id) {
 
 async function selectManyImageById(image_ids) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`SELECT * FROM images WHERE image_id IN (${image_ids});`;
-  
+  const response =
+    await sql`SELECT * FROM images WHERE image_id IN (${image_ids});`;
+
+  if (settings.DEBUG) {
+    console.log(response);
+  }
+
+  return response;
+}
+
+async function selectManyImageByUserId(user_id) {
+  const sql = neon(`${CONNECTION_STRING}`);
+  const response = await sql`SELECT * FROM images WHERE user_id = ${user_id};`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -95,7 +108,7 @@ async function selectManyImageById(image_ids) {
 async function deleteImageById(image_id) {
   const sql = neon(`${CONNECTION_STRING}`);
   const response = await sql`DELETE FROM images WHERE image_id = ${image_id};`;
-  
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -107,8 +120,13 @@ async function deleteImageById(image_id) {
 // Untested
 async function createAlbum(user_id, album_name) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`INSERT INTO albums (user_id, album_name) VALUES (${user_id}, ${album_name});`;
-  
+
+const response = await sql`
+  INSERT INTO albums (user_id, album_name)
+  VALUES (${user_id}, ${album_name})
+  RETURNING album_id;
+`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -118,8 +136,9 @@ async function createAlbum(user_id, album_name) {
 
 async function selectImageIdByAlbumId(album_id) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`SELECT image_id FROM image_album WHERE album_id = ${album_id};`;
-  
+  const response =
+    await sql`SELECT image_id FROM image_album WHERE album_id = ${album_id};`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -130,13 +149,13 @@ async function selectImageIdByAlbumId(album_id) {
 async function deleteAlbumById(album_id) {
   const sql = neon(`${CONNECTION_STRING}`);
   var response = await sql`DELETE FROM albums WHERE album_id = ${album_id};`;
-  
+
   if (settings.DEBUG) {
     console.log(response);
   }
 
   response = await sql`DELETE FROM image_album WHERE album_id = ${album_id};`;
-  
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -146,8 +165,9 @@ async function deleteAlbumById(album_id) {
 
 async function addImageToAlbum(album_id, image_id) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`INSERT INTO image_album (image_id, album_id) VALUES (${image_id}, ${album_id});`;
-  
+  const response =
+    await sql`INSERT INTO image_album (image_id, album_id) VALUES (${image_id}, ${album_id});`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -159,8 +179,9 @@ async function addImageToAlbum(album_id, image_id) {
 // Untested
 async function createTag(user_id, tag_name) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`INSERT INTO tags (user_id, tag_name) VALUES (${user_id}, ${tag_name});`;
-  
+  const response =
+    await sql`INSERT INTO tags (user_id, tag_name) VALUES (${user_id}, ${tag_name});`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -170,8 +191,9 @@ async function createTag(user_id, tag_name) {
 
 async function selectImageIdByTagId(tag_id) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`SELECT image_id FROM image_tag WHERE tag_id = ${tag_id};`;
-  
+  const response =
+    await sql`SELECT image_id FROM image_tag WHERE tag_id = ${tag_id};`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -182,13 +204,13 @@ async function selectImageIdByTagId(tag_id) {
 async function deleteTagById(tag_id) {
   const sql = neon(`${CONNECTION_STRING}`);
   var response = await sql`DELETE FROM tags WHERE tag_id = ${tag_id};`;
-  
+
   if (settings.DEBUG) {
     console.log(response);
   }
 
   response = await sql`DELETE FROM image_tag WHERE tag_id = ${tag_id};`;
-  
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -198,8 +220,9 @@ async function deleteTagById(tag_id) {
 
 async function addTagToImage(tag_id, image_id) {
   const sql = neon(`${CONNECTION_STRING}`);
-  const response = await sql`INSERT INTO image_tag (image_id, tag_id) VALUES (${image_id}, ${tag_id});`;
-  
+  const response =
+    await sql`INSERT INTO image_tag (image_id, tag_id) VALUES (${image_id}, ${tag_id});`;
+
   if (settings.DEBUG) {
     console.log(response);
   }
@@ -211,11 +234,12 @@ module.exports = {
   createUser,
   selectUserById,
   deleteUserById,
-  
+
   createImage,
   selectImageById,
   selectManyImageById,
   deleteImageById,
+  selectManyImageByUserId,
 
   createAlbum,
   selectImageIdByAlbumId,
@@ -227,5 +251,5 @@ module.exports = {
   deleteTagById,
   addTagToImage,
 
-  testConnection
+  testConnection,
 };

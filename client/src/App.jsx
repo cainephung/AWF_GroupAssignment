@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import Photos from "./pages/PhotoPage";
 import Albums from "./pages/AlbumPage";
 import CreateAlbumPage from "./pages/CreateAlbumPage";
+import AlbumView from "./pages/AlbumView"
 // Protected Route 
 import ProtectedRoute from "./assets/components/ProtectedRoute";
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/photos" element={<Photos />} />
         <Route path="/albums" element={<Albums />} />
+        <Route path="/album/:albumName" element={<AlbumView />} />
 
         <Route path="/create" element={<CreateAlbumPage />} />
 
