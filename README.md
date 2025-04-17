@@ -67,7 +67,7 @@ AWF_GroupAssignment/
 ## Environment Variables
 Create a .env file in the server/ directory:
 ``` bash
-DB_CONNECTION_STRING=your_neon_postgres_url
+DB_CONNECTION_STRING=
 ```
 
 ## Known Issues / To Do
