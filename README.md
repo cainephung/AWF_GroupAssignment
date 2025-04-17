@@ -77,7 +77,7 @@ DB_CONNECTION_STRING=
 
 ##  Contributors
 
-Brian Nguyen
-Caine Phung
-Evan Pogue 
-Caleb Cullen
+- Brian Nguyen
+- Caine Phung
+- Evan Pogue
+- Caleb Cullen
